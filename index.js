@@ -6,19 +6,20 @@ const { Pool } = require('pg');
 const app = express();
 const port = process.env.PORT || 10000;
 
-// Conexión a PostgreSQL
+// Habilita CORS y JSON
+app.use(cors());
+app.use(bodyParser.json());
+
+// Conexión a tu base de datos PostgreSQL (Render ya te dio la URL)
 const pool = new Pool({
   connectionString: 'postgresql://tgs_user:b6EkgcyjB8x4ZtPgAtLdNnMY7pK5Uh1L@dpg-cvu8h83uibrs73ejppp0-a.oregon-postgres.render.com/tgs'
 });
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
-
-// Ruta de registro
+// AQUÍ ESTÁ LA RUTA /register
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
 
+  // Validación básica
   if (!username || !email || !password) {
     return res.status(400).json({ error: 'Faltan datos requeridos.' });
   }
@@ -36,6 +37,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
+// Esto arranca el servidor
 app.listen(port, () => {
   console.log(`Servidor corriendo en puerto ${port}`);
 });
